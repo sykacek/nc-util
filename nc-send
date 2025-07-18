@@ -2,7 +2,6 @@
 
 set -e
 
-#CONFIG="smart.conf"
 CONFIG="/etc/nc-util.conf"
 TEMP=".nc_send"
 PORT=6000
@@ -19,15 +18,15 @@ read_config() {
 	if [[ -a $CONFIG ]]; then
 		if [[ $(cat $CONFIG | grep port) ]]; then
 			PORT=$(cat $CONFIG | grep port | cut -d = -f 2)
-			echo "found port $PORT"
+			echo "using port $PORT" >&1
 		fi
 		if [[ $(cat $CONFIG | grep params) ]]; then
 			PARAMS=$(cat $CONFIG | grep params | cut -d = -f 2)
-			echo "found params $PARAMS"
+			echo "using params $PARAMS" >&1
 		fi
 		if [[ $(cat $CONFIG | grep timeout) ]]; then
 			PARAMS=$(cat $CONFIG | grep timeout | cut -d = -f 2)
-			echo "found timeout $PARAMS"
+			echo "using timeout $PARAMS" >&1
 		fi
 	fi
 }

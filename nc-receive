@@ -15,11 +15,11 @@ read_config() {
 	if [[ -a $CONFIG ]]; then
 		if [[ $(cat $CONFIG | grep port) ]]; then
 			PORT=$(cat $CONFIG | grep port | cut -d = -f 2)
-			echo "found port $PORT"
+			echo "using port $PORT" >&1
 		fi
 		if [[ $(cat $CONFIG | grep rec_params) ]]; then
 			PARAMS=$(cat $CONFIG | grep rec_params | cut -d = -f 2)
-			echo "found params $PARAMS"
+			echo "using params $PARAMS" >&1
 		fi
 	fi
 }
