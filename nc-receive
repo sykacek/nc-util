@@ -1,0 +1,46 @@
+#!/bin/bash
+
+CONFIG="/etc/nc-util.conf"
+TEMP=".nc_receive"
+PORT=6000
+
+help() {
+	echo "no arguments are needed"
+	echo "config is managed via $CONFIG"
+	
+	exit 1
+}
+
+read_config() {
+	if [[ -a $CONFIG ]]; then
+		if [[ $(cat $CONFIG | grep port) ]]; then
+			PORT=$(cat $CONFIG | grep port | cut -d = -f 2)
+			echo "found port $PORT"
+		fi
+		if [[ $(cat $CONFIG | grep rec_params) ]]; then
+			PARAMS=$(cat $CONFIG | grep rec_params | cut -d = -f 2)
+			echo "found params $PARAMS"
+		fi
+	fi
+}
+
+main() {
+	read_config
+
+	#read file name
+	nc -l $PORT > $TEMP
+	local FILENAME=$(cat $TEMP)
+	rm $TEMP
+
+	#duplicate original filename
+	nc -l $PORT > $FILENAME
+
+	exit 0
+}
+
+if [[ $# -ne 0 ]]; then
+	echo "Invalid number of arguments!" >&2
+	help
+fi
+
+main

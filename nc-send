@@ -1,0 +1,61 @@
+#!/bin/bash
+
+set -e
+
+#CONFIG="smart.conf"
+CONFIG="/etc/nc-util.conf"
+TEMP=".nc_send"
+PORT=6000
+PARAMS=""
+TIMEOUT=3
+
+help() {
+	echo "usage is nc-send [name of file] [ip address]"
+	echo "config is managed via $CONFIG, can not edit manually"
+	exit 1
+}
+
+read_config() {
+	if [[ -a $CONFIG ]]; then
+		if [[ $(cat $CONFIG | grep port) ]]; then
+			PORT=$(cat $CONFIG | grep port | cut -d = -f 2)
+			echo "found port $PORT"
+		fi
+		if [[ $(cat $CONFIG | grep params) ]]; then
+			PARAMS=$(cat $CONFIG | grep params | cut -d = -f 2)
+			echo "found params $PARAMS"
+		fi
+		if [[ $(cat $CONFIG | grep timeout) ]]; then
+			PARAMS=$(cat $CONFIG | grep timeout | cut -d = -f 2)
+			echo "found timeout $PARAMS"
+		fi
+	fi
+}
+
+main() {
+	read_config
+
+	#chech if file exists and send its filename first
+	if ! [[ -a $FILE ]]; then
+		echo "File $FILE does not exist, aborting!"
+		exit 1
+	fi
+
+	echo $FILE > $TEMP
+	nc -w $TIMEOUT $ADDRESS $PORT < $TEMP
+	rm $TEMP
+	
+	nc -w $TIMEOUT $ADDRESS $PORT < $FILE
+	echo "nc -w 3 $ADDRESS $PORT < $FILE"
+	exit 0
+}
+
+if [[ $# -ne 2 ]]; then
+	echo "Invalid number of arguments!" >&2
+	help
+fi
+
+FILE=$1
+ADDRESS=$2
+
+main
