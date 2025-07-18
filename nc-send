@@ -25,8 +25,8 @@ read_config() {
 			echo "using params $PARAMS" >&1
 		fi
 		if [[ $(cat $CONFIG | grep timeout) ]]; then
-			PARAMS=$(cat $CONFIG | grep timeout | cut -d = -f 2)
-			echo "using timeout $PARAMS" >&1
+			TIMEOUT=$(cat $CONFIG | grep timeout | cut -d = -f 2)
+			echo "using timeout $TIMEOUT" >&1
 		fi
 	fi
 }
@@ -45,7 +45,6 @@ main() {
 	rm $TEMP
 	
 	nc $PARAMS -w $TIMEOUT $ADDRESS $PORT < $FILE
-	echo "nc -w 3 $ADDRESS $PORT < $FILE"
 	exit 0
 }
 
