@@ -28,9 +28,9 @@ main() {
 	read_config
 
 	#read file name
-	nc -l $PORT > $TEMP
+	nc $PARAMS -l $PORT > $TEMP
 	local FILENAME=$(cat $TEMP)
-	rm $TEMP
+	rm $PARAMS $TEMP
 
 	#duplicate original filename
 	nc -l $PORT > $FILENAME

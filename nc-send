@@ -41,10 +41,10 @@ main() {
 	fi
 
 	echo $FILE > $TEMP
-	nc -w $TIMEOUT $ADDRESS $PORT < $TEMP
+	nc $PARAMS -w $TIMEOUT $ADDRESS $PORT < $TEMP
 	rm $TEMP
 	
-	nc -w $TIMEOUT $ADDRESS $PORT < $FILE
+	nc $PARAMS -w $TIMEOUT $ADDRESS $PORT < $FILE
 	echo "nc -w 3 $ADDRESS $PORT < $FILE"
 	exit 0
 }
